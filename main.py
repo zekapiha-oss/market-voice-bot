@@ -1,17 +1,25 @@
-﻿import os
-from dotenv import load_dotenv
+import os
+import requests
+import feedparser
 from groq import Groq
 
-# Завантажуємо змінні з файлу .env
-load_dotenv()
+# Получаем ключи напрямую из системного окружения (GitHub Secrets)
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
+BOT_TOKEN = os.environ.get("BOT_TOKEN")
+CHANNEL_ID = os.environ.get("CHANNEL_ID")
 
-# Отримуємо ключ із захищеного файлу .env
-api_key = os.getenv("GROQ_API_KEY")
+# Проверка, что ключи вообще нашлись
+if not GROQ_API_KEY or not BOT_TOKEN:
+    print("❌ Ошибка: Ключи не найдены в переменных окружения!")
+    exit(1)
 
-if not api_key:
-    raise ValueError("API ключ не знайдено. Перевірте файл .env")
+client = Groq(api_key=GROQ_API_KEY)
 
-# Ініціалізація клієнта
-client = Groq(api_key=api_key)
+def main():
+    print("⏳ Бот запущен и проверяет новости...")
+    # ... здесь твой код с RSS и логикой ...
+    # (Оставь остальную часть своего кода здесь, просто убедись, 
+    # что нет строк с load_dotenv)
 
-print("Бот успішно ініціалізований з ключем із файлу .env")
+if __name__ == "__main__":
+    main()

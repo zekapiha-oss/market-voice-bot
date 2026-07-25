@@ -2,23 +2,38 @@ name: Market Voice Bot
 
 on:
   schedule:
-    - cron: '*/12 * * * *'
-  workflow_dispatch:
+    - cron: '*/12 * * * *' # Проверка каждые 12 минут
+  workflow_dispatch: # Позволяет запускать бота вручную кнопкой в GitHub
 
 jobs:
   run-bot:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # 👈 Обязательно: дает боту право сохранять файл в репозиторий
+
     steps:
       - uses: actions/checkout@v3
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
+
       - name: Install dependencies
         run: pip install -r requirements.txt
+
       - name: Run bot
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           CHANNEL_ID: ${{ secrets.CHANNEL_ID }}
         run: python main.py
+
+      - name: Commit and push last_post.txt
+        # 👈 Обязательный шаг: сохраняет историю отправок в файл last_post.txt
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add last_post.txt
+          git diff --quiet && git diff --staged --quiet || git commit -m "Update last_post.txt [skip ci]"
+          git push

@@ -2,7 +2,7 @@ name: Market Voice Bot
 
 on:
   schedule:
-    - cron: '*/12 * * * *' # Проверка каждые 12 минут
+    - cron: '*/6 * * * *' # Проверка каждые 12 минут
   workflow_dispatch: # Позволяет запускать бота вручную кнопкой в GitHub
 
 jobs:

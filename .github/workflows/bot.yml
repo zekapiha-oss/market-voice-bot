@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [ "main", "master" ]
   schedule:
-    - cron: '0 */3 * * *' # Автоматический запуск каждые 3 часа (опционально)
+    - cron: '*/12 * * * *' # Запуск каждые 12 минут
 
 jobs:
   build-and-test:
@@ -30,9 +30,7 @@ jobs:
     - name: Lint with flake8
       run: |
         pip install flake8
-        # останавливать сборку при наличии синтаксических ошибок или неопределенных имен
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # общая проверка стиля (выводит предупреждения)
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
     - name: Run Bot Script

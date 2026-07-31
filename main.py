@@ -2,10 +2,7 @@ import os
 import logging
 from pathlib import Path
 import requests
-from dotenv import load-dotenv # type: ignore
-
-# Загрузка переменных окружения из файла .env (если он есть локально)
-load_dotenv()
+from dotenv import load_dotenv
 
 # Настройка профессионального логирования
 logging.basicConfig(
@@ -13,6 +10,9 @@ logging.basicConfig(
     level=logging.INFO
 )
 logger = logging.getLogger(__name__)
+
+# Загрузка переменных окружения из файла .env (если он есть локально)
+load_dotenv()
 
 # Конфигурация из переменных окружения
 BOT_TOKEN = os.getenv("BOT_TOKEN")
@@ -33,7 +33,7 @@ def save_last_processed_id(post_id: str) -> None:
     """Сохраняет ID последнего обработанного поста."""
     STATE_FILE.write_text(str(post_id), encoding="utf-8")
 
-def send_telegram_message(text: string) -> bool: # type: ignore
+def send_telegram_message(text: str) -> bool:
     """Безопасная отправка сообщения в Telegram канал."""
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
     payload = {

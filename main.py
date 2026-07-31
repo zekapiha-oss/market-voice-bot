@@ -57,9 +57,9 @@ def main():
     last_id = get_last_processed_id()
     logger.info(f"Поточний стан (last_id): {last_id if last_id else 'Порожньо'}")
     
-    # Приклад логіки перевірки даних та публікації виключно українською мовою
-    new_content_id = "sample_market_update_01"
-    new_text = "📈 **Market Voice Update**\n\nСитуація на ринках стабільна. Дані оновлено в автоматичному режимі."
+    # Назва каналу жирним шрифтом, слово Update повністю прибрано
+    new_content_id = "sample_market_update_02"
+    new_text = "📈 **Market Voice**\n\nСитуація на ринках стабільна. Дані оновлено в автоматичному режимі."
 
     if new_content_id != last_id:
         success = send_telegram_message(new_text)

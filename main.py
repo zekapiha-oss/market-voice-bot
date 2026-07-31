@@ -20,21 +20,21 @@ CHANNEL_ID = os.getenv("CHANNEL_ID")
 STATE_FILE = Path("last_post.txt")
 
 if not BOT_TOKEN or not CHANNEL_ID:
-    logger.error("Критическая ошибка: Не заданы BOT_TOKEN или CHANNEL_ID в переменных окружения!")
+    logger.error("Критична помилка: Не задано BOT_TOKEN або CHANNEL_ID у змінних середовища!")
     exit(1)
 
 def get_last_processed_id() -> str:
-    """Читает ID последнего обработанного поста из файла."""
+    """Читає ID останнього опрацьованого поста з файлу."""
     if STATE_FILE.exists():
         return STATE_FILE.read_text(encoding="utf-8").strip()
     return ""
 
 def save_last_processed_id(post_id: str) -> None:
-    """Сохраняет ID последнего обработанного поста."""
+    """Зберігає ID останнього опрацьованого поста."""
     STATE_FILE.write_text(str(post_id), encoding="utf-8")
 
 def send_telegram_message(text: str) -> bool:
-    """Безопасная отправка сообщения в Telegram канал."""
+    """Безпечне надсилання повідомлення в Telegram канал українською мовою."""
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
     payload = {
         "chat_id": CHANNEL_ID,
@@ -45,29 +45,28 @@ def send_telegram_message(text: str) -> bool:
     try:
         response = requests.post(url, json=payload, timeout=10)
         response.raise_for_status()
-        logger.info("Сообщение успешно отправлено в канал.")
+        logger.info("Повідомлення успішно надіслано в канал.")
         return True
     except requests.exceptions.RequestException as e:
-        logger.error(f"Ошибка при отправке запроса в Telegram API: {e}")
+        logger.error(f"Помилка під час надсилання запиту в Telegram API: {e}")
         return False
 
 def main():
     logger.info("Запуск Market Voice Bot...")
     
     last_id = get_last_processed_id()
-    logger.info(f"Текущее состояние (last_id): {last_id if last_id else 'Пусто'}")
+    logger.info(f"Поточний стан (last_id): {last_id if last_id else 'Порожньо'}")
     
-    # Пример логики проверки данных и публикации
-    # (Здесь интегрируется ваш парсер рынка / генератор контента)
+    # Приклад логіки перевірки даних та публікації виключно українською мовою
     new_content_id = "sample_market_update_01"
-    new_text = "📈 **Market Voice Update**\n\nСитуация на рынках стабильна. Данные обновлены в автоматическом режиме."
+    new_text = "📈 **Market Voice Update**\n\nСитуація на ринках стабільна. Дані оновлено в автоматичному режимі."
 
     if new_content_id != last_id:
         success = send_telegram_message(new_text)
         if success:
             save_last_processed_id(new_content_id)
     else:
-        logger.info("Новых данных для публикации нет.")
+        logger.info("Нових даних для публікації немає.")
 
 if __name__ == "__main__":
     main()
